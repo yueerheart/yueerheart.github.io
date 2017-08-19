@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../js/jquery-3.2.1.js"></script>
+</head>
+<body>
+<div>
+    <h1>Hello word</h1>
+    <p style="display: none">hi my name is Tangtongsong</p>
+</div>
+<script>
+    function typetext(element,speed){
+        var text = $(element).text();
+        $(element).text("");
+        var i = 0;
+        var time = setInterval(function () {
+            if(i<text.length){
+                 $(element).append(text.charAt(i));
+                 i++;
+            }else{
+                clearInterval(time);
+            }
+        },speed)
+    }
+
+    $(function(){
+        var speed = 75;
+        var settimeout = $("h1").text().length*speed+speed;
+        typetext($("h1"),speed);
+        setTimeout(function(){
+            $('p').css('display', 'inline-block');
+            typetext($("p"),speed)
+        },settimeout);
+    })
+</script>
+</body>
+</html>

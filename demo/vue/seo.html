@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <!--兼容IE浏览器，告诉IE浏览器使用最新版本的引擎显示当前的页面-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--为了兼容移动设备，使当前页面和移动设备比例保持1：1-->
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>Bootstrap 101 Template</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <script src="vue.js"></script>
+    <script src="vue-resource.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        .ul{
+        min-width: 160px;
+        padding: 5px 5px;
+        font-size: 14px;
+        text-align: left;
+        background-color: #fff;
+        -webkit-background-clip: padding-box;
+        background-clip: padding-box;
+        border: 1px solid rgba(0, 0, 0, .15);
+        border-radius: 4px;
+        -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+        width:20%;
+        margin: 2px auto;
+        list-style: none
+        }
+        .color{
+            background: #ccc;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+           new Vue({
+               el:"#box",
+               data:{
+                   myData:[],
+                   t1:"",
+                   now:-1
+               },
+               methods:{
+                    get:function (ev) {
+                        if(ev.keyCode==38||ev.keyCode==40){
+                            return;
+                        }
+                        if(ev.keyCode==13){
+                            window.open("https://www.baidu.com/s?wd="+this.t1);
+                            this.t1="";
+                        }
+                        this.$http.jsonp("https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su",
+                        { //请求参数
+                                wd:this.t1
+                            //https://sug.so.360.cn/suggest?callback=suggest_so&word=a
+                        },{
+                           jsonp:"cb"
+                        }).then(function (res) {
+                            //成功回调函数
+                            this.myData=res.data.s;
+                        },function () {
+                            //失败回调函数
+                            console.log(1)
+                        })
+                    },
+                   shousuo:function () {
+                       window.open("https://www.baidu.com/s?wd="+this.t1);
+                       this.t1="";
+                   },
+                   changeDown:function () {
+                        this.now++;
+                        if(this.now==this.myData.length){
+                            this.now=0;
+                        }
+                        this.t1 = this.myData[this.now];
+                   },
+                   changeUp:function () {
+                       if(this.now==0){
+                           this.now=this.myData.length;
+                       }
+                       this.now--;
+                       this.t1 = this.myData[this.now];
+                   }
+               }
+           })
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div id="box">
+                <div style="width: 20%;margin:0 auto; margin-top: 20px" class="input-group">
+                    <input v-model="t1" type="text" class="form-control" @keyup="get($event)" @keydown.down="changeDown()" @keydown.up.prevent="changeUp()">
+                    <span class="input-group-btn">
+                        <input type="submit" value="搜索" class="btn btn-danger" @click="shousuo()">
+                    </span>
+                </div>
+                <ul v-show="myData.length!=0" class="ul">
+                    <li v-for="(value,$index) in myData" :class="{color:$index==now}">
+                        <a>{{value}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<!--引用javascript必要的插件-->
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="js/jquery-3.2.1.js"></script>
+<script src="js/bootstrap.js"></script>
+</body>
+</html>
